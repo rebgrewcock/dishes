@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 require_relative "rgrewcock_dishes/version"
-require_relative "rgrewcock_dishes/dishes.csv"
+require_relative "rgrewcock_dishes/dishes"
 
 module RgrewcockDishes
-
-require 'csv'
 
   #takes in dish name and returns its ingredients string.
   def dish_to_ingredients(dish_key, data)
@@ -92,7 +92,7 @@ require 'csv'
 
   #dinner inspire returns all dishes in hash
   def inspire
-  	returns list_all_dishes(table)
+  	return list_all_dishes(table).join("\n")
   end
 
   #----------------
@@ -100,6 +100,7 @@ require 'csv'
   #dinner combine returns ingredients for all dishes
   def combine(dish_array)
   	if !dish_array.empty?
+      ## TODO: array includes empty string.
   		ingredients = []
   		no_ingredients_dishes = []
   		dish_array.each do |dish_element|
@@ -123,8 +124,19 @@ require 'csv'
 
   	#builds shopping list
   	shopping_list = make_shopping_list(ingredients_array, no_ingredients_dishes).join("\n")
+
+    #returns shopping list_all_dishes
+    return shopping_list
   end
 
   #----------------
 
+end
+
+class String
+  include RgrewcockDishes
+end
+
+class Integer
+  include RgrewcockDishes
 end
