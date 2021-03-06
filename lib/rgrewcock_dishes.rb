@@ -90,28 +90,25 @@ require 'csv'
 
   #----------------
 
-  #evaluates command line args
-
   #dinner inspire returns all dishes in hash
-  if ARGV[0] == "inspire"
-  	puts list_all_dishes(table)
+  def inspire
+  	returns list_all_dishes(table)
+  end
 
   #----------------
 
   #dinner combine returns ingredients for all dishes
-  elsif ARGV[0] == "combine"
-  	ARGV.shift
-  	if !ARGV.empty?
-  		args = ARGV
+  def combine(dish_array)
+  	if !dish_array.empty?
   		ingredients = []
   		no_ingredients_dishes = []
-  		args.each do |arg|
-  			arg_string = arg.downcase
+  		dish_array.each do |dish_element|
+  			arg_string = dish_element.downcase
   			if table[arg_string]
   				#concat makes array rather than array of arrays
   				ingredients.concat(table[arg_string])
   			else
-  				no_ingredients_dishes << arg
+  				no_ingredients_dishes << dish_element
   			end
   		end
   	else
@@ -125,33 +122,9 @@ require 'csv'
   	ingredients_array = build_counted_dishes_array(ingredients_num_hash)
 
   	#builds shopping list
-  	shopping_list = make_shopping_list(ingredients_array, no_ingredients_dishes)
-
-  	#writes output to file.
-  	File.write('shopping_list.txt', shopping_list.join("\n"))
+  	shopping_list = make_shopping_list(ingredients_array, no_ingredients_dishes).join("\n")
+  end
 
   #----------------
-
-  #dinner dish titles return ingredients for dishes to screen and file
-  else
-  	if !ARGV.empty?
-  	dish_args = ARGV
-
-  	#reads argument and returns ingredients for dish.
-  		output = []
-  		dish_args.each do |dish_arg|
-  			key_string = dish_arg.downcase
-  			sentence = dish_to_sentence(dish_arg, key_string, table)
-  			output << sentence
-  		end
-  		puts output
-  	else
-  		abort("Please include a dishy argument.")
-  	end
-
-  	#writes output to file.
-  	File.write('dishes_output.txt', output.join("\n"))
-
-  end
 
 end
